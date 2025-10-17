@@ -49,9 +49,20 @@ do
             -- Create the preview if the mouse is over the deck, and if there is a card to show
             if HOVER.deck and #self.cards >= 1 and HOVER.preview == nil then
                 -- Create a copy of the top card
-                local top_card = self.cards[#self.cards]:save()
-                local preview_card = Card(0,0, CARD_W, CARD_H, P_CENTERS.j_joker, P_CENTERS.c_base)
-                preview_card:load(top_card)
+                local top_card = self.cards[#self.cards]
+
+                -- Load the rank and suit of the top card [LegitGopnik]
+                local top_suit = top_card.base.suit:sub(1,1)
+                local top_value = top_card.base.value:sub(1,1)
+                if top_value == "1" then top_value = "T" end
+                local preview_card = Card(0,
+                    0,
+                    CARD_W,
+                    CARD_H,
+                    G.P_CARDS[top_suit..'_'..top_value],
+                    P_CENTERS.c_base
+                )
+
                 -- Ensure the preview card is facing front
                 if preview_card.facing ~= "front" then
                     preview_card:flip()
